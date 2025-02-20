@@ -3,6 +3,13 @@ import numpy as np
 from PIL import Image
 from image_matching import calculate_match_percentage  # Importing the image matching function
 
+
+import cv2  # For OpenCV (image processing)
+
+import pandas as pd  # If you're using dataframes
+import matplotlib.pyplot as plt  # For data visualization
+
+
 # Streamlit app UI
 def main():
     st.title('Image Comparison - Match Percentage')
