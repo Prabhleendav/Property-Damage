@@ -2,7 +2,7 @@ import streamlit as st
 import numpy as np
 import cv2
 from PIL import Image
-from image_matching import calculate_match_percentage  # Import the function
+from image_matching import calculate_match_percentage
 
 # Streamlit app UI
 def main():
@@ -13,12 +13,12 @@ def main():
     uploaded_after = st.file_uploader("Upload 'After' Image", type=["png", "jpg", "jpeg"])
 
     if uploaded_before and uploaded_after:
-        # Convert uploaded images to OpenCV format (BGR)
-        before_image = Image.open(uploaded_before)
-        after_image = Image.open(uploaded_after)
+        # Convert images to OpenCV format (BGR)
+        before_image = np.array(Image.open(uploaded_before))
+        after_image = np.array(Image.open(uploaded_after))
 
-        before_cv = cv2.cvtColor(np.array(before_image), cv2.COLOR_RGB2BGR)
-        after_cv = cv2.cvtColor(np.array(after_image), cv2.COLOR_RGB2BGR)
+        before_cv = cv2.cvtColor(before_image, cv2.COLOR_RGB2BGR)
+        after_cv = cv2.cvtColor(after_image, cv2.COLOR_RGB2BGR)
 
         # Display images
         st.image(before_image, caption="Before Image", use_column_width=True)
