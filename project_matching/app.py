@@ -1,37 +1,34 @@
 import streamlit as st
 import numpy as np
+import cv2
 from PIL import Image
-from image_matching import calculate_match_percentage  # Importing the image matching function
-
-
-import cv2  # For OpenCV (image processing)
-
-import pandas as pd  # If you're using dataframes
-import matplotlib.pyplot as plt  # For data visualization
-
+from image_matching import calculate_match_percentage  # Import the function
 
 # Streamlit app UI
 def main():
     st.title('Image Comparison - Match Percentage')
 
-    # Upload 'before' and 'after' images
+    # Upload images
     uploaded_before = st.file_uploader("Upload 'Before' Image", type=["png", "jpg", "jpeg"])
     uploaded_after = st.file_uploader("Upload 'After' Image", type=["png", "jpg", "jpeg"])
 
-    if uploaded_before is not None and uploaded_after is not None:
-        # Read the images
-        before_image = np.array(Image.open(uploaded_before))
-        after_image = np.array(Image.open(uploaded_after))
+    if uploaded_before and uploaded_after:
+        # Convert uploaded images to OpenCV format (BGR)
+        before_image = Image.open(uploaded_before)
+        after_image = Image.open(uploaded_after)
 
-        # Show the uploaded images
+        before_cv = cv2.cvtColor(np.array(before_image), cv2.COLOR_RGB2BGR)
+        after_cv = cv2.cvtColor(np.array(after_image), cv2.COLOR_RGB2BGR)
+
+        # Display images
         st.image(before_image, caption="Before Image", use_column_width=True)
         st.image(after_image, caption="After Image", use_column_width=True)
 
-        # Calculate the match percentage using the imported function
-        match_percentage = calculate_match_percentage(before_image, after_image)
+        # Calculate match percentage
+        match_percentage = calculate_match_percentage(before_cv, after_cv)
 
-        # Display the result
-        st.write(f"Match Percentage: {match_percentage:.2f}%")
+        # Display result
+        st.success(f"Match Percentage: {match_percentage:.2f}%")
 
 if __name__ == "__main__":
     main()
