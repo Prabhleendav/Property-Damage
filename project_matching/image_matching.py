@@ -12,11 +12,14 @@ def calculate_match_percentage(before, after):
     if before_gray.shape != after_gray.shape:
         after_gray = cv2.resize(after_gray, (before_gray.shape[1], before_gray.shape[0]))
 
-    # Convert images to float32 (required by SSIM)
-    before_gray = before_gray.astype("float32") / 255.0
-    after_gray = after_gray.astype("float32") / 255.0
+    # Convert images to float64 (SSIM requires this format)
+    before_gray = before_gray.astype("float64") / 255.0
+    after_gray = after_gray.astype("float64") / 255.0
 
     # Compute SSIM
-    score, _ = ssim(before_gray, after_gray, full=True)
-
-    return score * 100
+    try:
+        score, _ = ssim(before_gray, after_gray, full=True)
+        return score * 100
+    except ValueError as e:
+        print(f"SSIM calculation error: {e}")
+        return 0  # Return 0% if SSIM fails
