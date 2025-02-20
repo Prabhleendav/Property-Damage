@@ -14,8 +14,13 @@ def main():
 
     if uploaded_before and uploaded_after:
         # Convert images to OpenCV format (BGR)
-        before_image = np.array(Image.open(uploaded_before))
-        after_image = np.array(Image.open(uploaded_after))
+        before_image = np.array(Image.open(uploaded_before).convert("RGB"))
+        after_image = np.array(Image.open(uploaded_after).convert("RGB"))
+
+        # Ensure images are not empty
+        if before_image is None or after_image is None:
+            st.error("Error loading images. Please upload valid images.")
+            return
 
         before_cv = cv2.cvtColor(before_image, cv2.COLOR_RGB2BGR)
         after_cv = cv2.cvtColor(after_image, cv2.COLOR_RGB2BGR)
